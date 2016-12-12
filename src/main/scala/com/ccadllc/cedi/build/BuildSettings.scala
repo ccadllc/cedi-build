@@ -74,7 +74,8 @@ object BuildSettings extends AutoPlugin {
     unmanagedResources in Compile ++= {
       val base = baseDirectory.value
       (base / "NOTICE") +: (base / "LICENSE") +: (base / "CONTRIBUTING") +: ((base / "licenses") * "LICENSE_*").get
-    }
+    },
+    resolvers += Resolver.sonatypeRepo("public")
   )
 
   private def scalaSettings = Seq(
