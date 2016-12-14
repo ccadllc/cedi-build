@@ -98,7 +98,7 @@ object BuildSettings extends AutoPlugin {
       "-Ypartial-unification"
     ),
     docSourcePath := baseDirectory.value,
-    scalacOptions in (Compile, doc) := {
+    scalacOptions in (Compile, doc) ++= {
       val tagOrBranch = {
         if (version.value endsWith "SNAPSHOT") gitCurrentBranch.value
         else ("v" + version.value)
