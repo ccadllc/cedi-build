@@ -129,6 +129,7 @@ object BuildSettings extends AutoPlugin {
   private def osgiSettings = SbtOsgi.autoImport.osgiSettings ++ Seq(
     OsgiKeys.exportPackage := Seq(rootPackage.value + ".*;version=${Bundle-Version}"),
     OsgiKeys.importPackage := Seq("""scala.*;version="${range;[==,=+)}"""", "*"),
+    OsgiKeys.privatePackage := Seq(rootPackage.value + ".*"),
     OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package")
   )
 
