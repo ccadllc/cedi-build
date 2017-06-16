@@ -7,10 +7,10 @@ crossScalaVersions := Seq(scalaVersion.value)
 publishMavenStyle := true
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
-addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.4.2")
+addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.5.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.9.1")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.11")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.14")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.0")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.8.5")
@@ -54,4 +54,3 @@ useGpg := true
 useGpgAgent := true
 
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
-

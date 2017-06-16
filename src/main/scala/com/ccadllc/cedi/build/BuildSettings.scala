@@ -80,7 +80,7 @@ object BuildSettings extends AutoPlugin {
 
   private def scalaSettings = Seq(
     scalaVersion := crossScalaVersions.value.head,
-    crossScalaVersions := Seq("2.12.1", "2.11.8"),
+    crossScalaVersions := Seq("2.12.2", "2.11.11"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding", "UTF-8",
