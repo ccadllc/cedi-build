@@ -55,10 +55,12 @@ object BuildSettings extends AutoPlugin {
       (autoImport.rootPackage := rootPackage) ++ BuildSettings.osgiSettings
     }
 
+    lazy val emptyValue: Unit = ()
+
     lazy val noPublish = Seq(
-      publish := (),
-      publishLocal := (),
-      PgpKeys.publishSigned := (),
+      publish := emptyValue,
+      publishLocal := emptyValue,
+      PgpKeys.publishSigned := emptyValue,
       publishArtifact := false
     )
   }
@@ -193,8 +195,8 @@ object BuildSettings extends AutoPlugin {
   }
 
   private def scalastyleSettings = Seq(
-    (ScalastylePlugin.scalastyleConfigUrl in Compile) := Some(this.getClass.getResource("/com/ccadllc/cedi/build/scalastyle-config.xml")),
-    runScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+    (org.scalastyle.sbt.ScalastylePlugin.autoImport.scalastyleConfigUrl in Compile) := Some(this.getClass.getResource("/com/ccadllc/cedi/build/scalastyle-config.xml")),
+    runScalastyle := org.scalastyle.sbt.ScalastylePlugin.autoImport.scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test).dependsOn(runScalastyle)).value
   )
 
