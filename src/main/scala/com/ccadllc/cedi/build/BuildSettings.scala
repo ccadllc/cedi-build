@@ -24,9 +24,6 @@ import GitKeys._
 import com.typesafe.sbt.osgi.SbtOsgi
 import SbtOsgi.autoImport._
 
-import com.typesafe.sbt.SbtPgp
-import SbtPgp.autoImport._
-
 import sbtrelease.ReleasePlugin.autoImport._
 
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
@@ -60,7 +57,6 @@ object BuildSettings extends AutoPlugin {
     lazy val noPublish = Seq(
       publish := emptyValue,
       publishLocal := emptyValue,
-      PgpKeys.publishSigned := emptyValue,
       publishArtifact := false
     )
   }
@@ -160,14 +156,11 @@ object BuildSettings extends AutoPlugin {
       }
       val stripTestScope = stripIf { n => n.label == "dependency" && (n \ "scope").text == "test" }
       new RuleTransformer(stripTestScope).transform(node)(0)
-    },
-    useGpg := true,
-    useGpgAgent := true
+    }
   )
 
   private def releaseSettings = Seq(
-    releaseCrossBuild := true,
-    releasePublishArtifactsAction := PgpKeys.publishSigned.value
+    releaseCrossBuild := true
   )
 
   private def mimaSettings = mimaDefaultSettings ++ Seq(

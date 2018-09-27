@@ -9,7 +9,7 @@ publishMavenStyle := true
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.6.7")
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.9.4")
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
+addSbtPlugin("io.crashbox" % "sbt-gpg" % "0.2.0")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.18")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.7")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.1")
@@ -50,7 +50,3 @@ pomExtra := (
   </developers>
 )
 
-useGpg := true
-useGpgAgent := true
-
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
