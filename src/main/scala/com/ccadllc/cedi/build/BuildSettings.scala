@@ -55,10 +55,12 @@ object BuildSettings extends AutoPlugin {
       (autoImport.rootPackage := rootPackage) ++ BuildSettings.osgiSettings
     }
 
+    lazy val emptyValue: Unit = ()
+
     lazy val noPublish = Seq(
-      publish := (),
-      publishLocal := (),
-      PgpKeys.publishSigned := (),
+      publish := emptyValue,
+      publishLocal := emptyValue,
+      PgpKeys.publishSigned := emptyValue,
       publishArtifact := false
     )
   }
@@ -80,23 +82,22 @@ object BuildSettings extends AutoPlugin {
 
   private def scalaSettings = Seq(
     scalaVersion := crossScalaVersions.value.head,
-    crossScalaVersions := Seq("2.12.2", "2.11.11"),
+    crossScalaVersions := Seq("2.12.6", "2.11.12", "2.13.0-M4"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding", "UTF-8",
       "-feature",
       "-unchecked",
       "-Xlint",
-      "-Yno-adapted-args",
       "-Ywarn-dead-code",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
+      "-Ywarn-unused-import",
       "-Xfuture"
-    ) ++ ifAtLeast(scalaBinaryVersion.value, "2.11.0")(
-      "-Ywarn-unused-import"
-    ) ++ ifAtLeast(scalaBinaryVersion.value, "2.12.0")(
-      "-Ypartial-unification"
-    ),
+    ) ++ (CrossVersion.partialVersion(scalaBinaryVersion.value) match {
+      case Some((2, v)) if v <= 12 => Seq("-Ypartial-unification", "-Yno-adapted-args")
+      case other => Seq.empty
+    }),
     docSourcePath := baseDirectory.value,
     scalacOptions in (Compile, doc) ++= {
       val tagOrBranch = {
@@ -115,16 +116,6 @@ object BuildSettings extends AutoPlugin {
     scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
     testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
-
-  private def ifAtLeast(scalaBinaryVersion: String, atLeastVersion: String)(options: String*): Seq[String] = {
-    case class ScalaBinaryVersion(major: Int, minor: Int) extends Ordered[ScalaBinaryVersion] {
-      def compare(that: ScalaBinaryVersion) = Ordering[(Int, Int)].compare((this.major, this.minor), (that.major, that.minor))
-    }
-    val Pattern = """(\d+)\.(\d+).*""".r
-    def getScalaBinaryVersion(v: String) = v match { case Pattern(major, minor) => ScalaBinaryVersion(major.toInt, minor.toInt) }
-    if (getScalaBinaryVersion(scalaBinaryVersion) >= getScalaBinaryVersion(atLeastVersion)) options
-    else Seq.empty
-  }
 
   private def osgiSettings = SbtOsgi.autoImport.osgiSettings ++ Seq(
     OsgiKeys.exportPackage := Seq(rootPackage.value + ".*;version=${Bundle-Version}"),
@@ -193,8 +184,8 @@ object BuildSettings extends AutoPlugin {
   }
 
   private def scalastyleSettings = Seq(
-    (ScalastylePlugin.scalastyleConfigUrl in Compile) := Some(this.getClass.getResource("/com/ccadllc/cedi/build/scalastyle-config.xml")),
-    runScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+    (org.scalastyle.sbt.ScalastylePlugin.autoImport.scalastyleConfigUrl in Compile) := Some(this.getClass.getResource("/com/ccadllc/cedi/build/scalastyle-config.xml")),
+    runScalastyle := org.scalastyle.sbt.ScalastylePlugin.autoImport.scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test).dependsOn(runScalastyle)).value
   )
 
