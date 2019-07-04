@@ -78,7 +78,7 @@ object BuildSettings extends AutoPlugin {
 
   private def scalaSettings = Seq(
     scalaVersion := crossScalaVersions.value.head,
-    crossScalaVersions := Seq("2.12.6", "2.11.12"),
+    crossScalaVersions := Seq("2.13.0", "2.12.8", "2.11.12"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding", "UTF-8",
@@ -87,11 +87,9 @@ object BuildSettings extends AutoPlugin {
       "-Xlint",
       "-Ywarn-dead-code",
       "-Ywarn-numeric-widen",
-      "-Ywarn-value-discard",
-      "-Ywarn-unused-import",
-      "-Xfuture"
+      "-Ywarn-value-discard"
     ) ++ (CrossVersion.partialVersion(scalaBinaryVersion.value) match {
-      case Some((2, v)) if v <= 12 => Seq("-Ypartial-unification", "-Yno-adapted-args")
+      case Some((2, v)) if v <= 12 => Seq("-Xfuture", "-Ywarn-unused-import", "-Ypartial-unification", "-Yno-adapted-args")
       case other => Seq.empty
     }),
     docSourcePath := baseDirectory.value,
