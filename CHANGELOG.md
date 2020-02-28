@@ -1,3 +1,6 @@
+1.2.1
+=====
+ - Fix POM creation now that SBT already generates SCM section.
 1.2.0
 =====
  - Updated to work with scala 2.13

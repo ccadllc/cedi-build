@@ -131,10 +131,6 @@ object BuildSettings extends AutoPlugin {
     pomIncludeRepository := { x => false },
     pomExtra := (
       <url>http://github.com/ccadllc/{githubProject.value}</url>
-      <scm>
-        <url>${git.remoteRepo.value}</url>
-        <connection>scm:git:${git.remoteRepo.value}</connection>
-      </scm>
       <developers>
         {for (Contributor(username, name) <- contributors.value) yield
         <developer>
